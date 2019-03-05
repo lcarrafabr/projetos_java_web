@@ -5,6 +5,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class JPAUtil {
+	
+	/**Faz a conexão com o banco de dados*/
 
 	private static EntityManagerFactory factory;
 

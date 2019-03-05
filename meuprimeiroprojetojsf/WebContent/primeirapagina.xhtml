@@ -49,6 +49,20 @@
 			
 			<h:outputLabel value="Ativo"/>
 			<h:selectBooleanCheckbox value="#{pessoaBean.pessoa.ativo}"/>
+			
+			<h:outputLabel value="Login:"/>
+			<h:inputText value="#{pessoaBean.pessoa.login}"/>
+			
+			<h:outputLabel value="Senha:"/>
+			<h:inputSecret value="#{pessoaBean.pessoa.senha}"/>
+			
+			<h:outputLabel value="Perfil de usuário"/>
+			<h:selectOneMenu id="perfil" value="#{pessoaBean.pessoa.perfilUser}" required="false">
+				<f:selectItem itemLabel="[-Selecione-]" noSelectionOption="true"/>
+				<f:selectItem itemValue="ADMINISTRADOR" itemLabel="Administrador"/>
+				<f:selectItem itemValue="SECRETÁRIO" itemLabel="Secretário"/>
+				<f:selectItem itemValue="OPERADOR" itemLabel="Operador"/>
+			</h:selectOneMenu>
 
 			<h:outputLabel />
 			<h:panelGroup>
@@ -66,7 +80,7 @@
 			cellpadding="3">
 
 			<f:facet name="header">
-			Lista de pessoas cadastradas
+			Lista de usuários cadastrados
 		</f:facet>
 
 			<h:column>
