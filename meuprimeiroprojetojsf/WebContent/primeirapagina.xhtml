@@ -16,7 +16,7 @@
 	<h:form id="formPessoa">
 		<h:panelGrid columns="2">
 			<f:facet name="header">
-				<h:outputText value="Cadastro em JSF" />
+				<h:outputText value="Cadastro de usuários" />
 			</f:facet>
 			<h:outputLabel value="Id" />
 			<h:inputText value="#{pessoaBean.pessoa.id}" readonly="true" />
@@ -52,9 +52,10 @@
 
 			<h:outputLabel />
 			<h:panelGroup>
-				<h:commandButton value="Novo" action="#{pessoaBean.novo}" />
-				<h:commandButton value="Salvar" action="#{pessoaBean.salvar}" />
-				<h:commandButton value="Revomer" action="#{pessoaBean.remove}" />
+				<h:commandButton value="Novo" action="#{pessoaBean.novo}" image="resources/img/new_32.png" title="Cadastrar"/>
+				<h:commandButton value="Salvar" action="#{pessoaBean.salvar}" image="resources/img/save_32.png" title="Salvar"/>
+				<h:commandButton value="Revomer" action="#{pessoaBean.remove}" image="resources/img/delete_32.png" title="Deletar"/>
+				<h:commandButton value="Limpar" type="reset"/>
 			</h:panelGroup>
 
 		</h:panelGrid>
@@ -86,16 +87,16 @@
 			</h:column>
 			<h:column>
 				<f:facet name="header">Editar</f:facet>
-				<h:commandLink value="Editar">
-					<f:setPropertyActionListener value="#{pessoa}"
-						target="#{pessoaBean.pessoa}" />
+				<h:commandLink value="">
+					<f:setPropertyActionListener value="#{pessoa}" target="#{pessoaBean.pessoa}" />
+					<h:graphicImage value="resources/img/update_16.png"/>
 				</h:commandLink>
 			</h:column>
 			<h:column>
 				<f:facet name="header">Excluir</f:facet>
-				<h:commandLink value="Excluir" action="#{pessoaBean.remove}">
-					<f:setPropertyActionListener value="#{pessoa}"
-						target="#{pessoaBean.pessoa}" />
+				<h:commandLink value="" action="#{pessoaBean.remove}" title="Excluir registro">
+					<f:setPropertyActionListener value="#{pessoa}" target="#{pessoaBean.pessoa}" />
+					<h:graphicImage value="resources/img/delete_16.png"/>
 				</h:commandLink>
 			</h:column>
 		</h:dataTable>
