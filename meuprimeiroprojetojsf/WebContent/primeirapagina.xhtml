@@ -27,10 +27,16 @@
 			<h:inputText value="#{pessoaBean.pessoa.id}" readonly="true" />
 
 			<h:outputLabel value="Nome" />
-			<h:inputText value="#{pessoaBean.pessoa.nome}" />
+			<h:inputText value="#{pessoaBean.pessoa.nome}" 
+				required="true" requiredMessage="Informe o nome do usuário" validatorMessage="Nome deve ter o mín de 11 e máx de 100 caractere">
+				<f:validateLength minimum="3" maximum="100"/>
+			</h:inputText>
 
 			<h:outputLabel value="Sobrenome" />
-			<h:inputText value="#{pessoaBean.pessoa.sobrenome}" />
+			<h:inputText value="#{pessoaBean.pessoa.sobrenome}" 
+				required="true" requiredMessage="Informe o sobrenome" validatorMessage="O sobrenome não pode ser vazio">
+				<f:validateLength minimum="1"/>	
+			</h:inputText>
 
 			<h:outputLabel value="Idade" />
 			<h:inputText value="#{pessoaBean.pessoa.idade}" />
@@ -42,6 +48,12 @@
 				<f:selectItem itemValue="FEMININO" itemLabel="Feminino" />
 			</h:selectOneMenu>
 			
+			
+			<h:outputLabel value="Data nascimneto"/>
+			<h:inputText value="#{pessoaBean.pessoa.dataNascimento}" converterMessage="Data de nascimento inválida">
+				<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" timeZone="GMT-03:00"/>
+			</h:inputText>
+			
 			<h:outputLabel value="Frameworks:"/>
 			<h:selectManyMenu id="campoFrameworks" style="height:150px;"
 			value="#{pessoaBean.pessoa.frameworks}">
@@ -52,6 +64,11 @@
 				<f:selectItem itemValue="JSF"/>
 			</h:selectManyMenu>
 			
+			<h:outputLabel value="CEP:"/>
+			<h:inputText value="#{pessoaBean.pessoa.cep}">
+				<f:ajax event="blur" execute="@this" listener="#{pessoaBean.pesquisaCep}"/>      <!-- No JSF a perda de foco é blur -->
+			</h:inputText>
+			
 			<h:outputLabel value="Ativo"/>
 			<h:selectBooleanCheckbox value="#{pessoaBean.pessoa.ativo}"/>
 			
@@ -59,7 +76,10 @@
 			<h:inputText value="#{pessoaBean.pessoa.login}"/>
 			
 			<h:outputLabel value="Senha:"/>
-			<h:inputSecret value="#{pessoaBean.pessoa.senha}"/>
+			<h:inputSecret value="#{pessoaBean.pessoa.senha}" 
+				required="true" requiredMessage="Informe uma senha" validatorMessage="A senha precisa ter no mínimo 3 caracteres">
+				<f:validateLength minimum="3"/>
+			</h:inputSecret>
 			
 			<h:outputLabel value="Perfil de usuário"/>
 			<h:selectOneMenu id="perfil" value="#{pessoaBean.pessoa.perfilUser}" required="false">
@@ -89,16 +109,26 @@
 
 			<h:outputLabel />
 			<h:panelGroup>
-				<h:commandButton value="Novo" action="#{pessoaBean.novo}" image="resources/img/new_32.png" title="Cadastrar"/>
+				<h:commandButton value="Novo" id="botaoNovo" action="#{pessoaBean.novo}" image="resources/img/new_32.png" title="Cadastrar">
+					<f:ajax execute="botaoNovo" render="@form"/>	
+				</h:commandButton>
+				
 				<h:commandButton value="Salvar" action="#{pessoaBean.salvar}" image="resources/img/save_32.png" title="Salvar"/>
 				<h:commandButton value="Revomer" action="#{pessoaBean.remove}" image="resources/img/delete_32.png" title="Deletar" rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}"/>
-				<h:commandButton value="Limpar" type="reset"/>
+				
+				<h:commandButton value="Limpar" id="botaoLimpar" action="#{pessoaBean.limpar}" image="resources/img/clear_32.png" title="Resetar">
+					<f:ajax execute="botaoLimpar" render="@form"/>
+				</h:commandButton>
 			</h:panelGroup>
 
 		</h:panelGrid>
+		
+		</h:form>
 
 		<br />
 		<br />
+		
+		<h:form id="formTable">
 		<h:dataTable value="#{pessoaBean.pessoas}" var="pessoa" border="1"
 			cellpadding="3">
 
