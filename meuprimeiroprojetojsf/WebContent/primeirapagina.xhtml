@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui = "http://java.sun.com/jsf/facelets">
+	xmlns:ui = "http://java.sun.com/jsf/facelets"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
 
 <h:head>
 	<title>Olá Mundo JSF</title>
@@ -21,25 +22,27 @@
 	
 		<h:panelGrid columns="2">
 			<f:facet name="header">
-				<h:outputText value="Cadastro de usuários" />
+				<h:outputText value="Cadastro de usuários"/>
 			</f:facet>
 			<h:outputLabel value="Id" />
-			<h:inputText value="#{pessoaBean.pessoa.id}" readonly="true" />
+			<h:inputText value="#{pessoaBean.pessoa.id}" pt:placeholder="Campo automático" readonly="true"/>
 
 			<h:outputLabel value="Nome" />
 			<h:inputText value="#{pessoaBean.pessoa.nome}" 
-				required="true" requiredMessage="Informe o nome do usuário" validatorMessage="Nome deve ter o mín de 11 e máx de 100 caractere">
+				required="true" requiredMessage="Informe o nome do usuário" pt:placeholder="Informe o nome do usuário" 
+				validatorMessage="Nome deve ter o mín de 11 e máx de 100 caractere">
 				<f:validateLength minimum="3" maximum="100"/>
 			</h:inputText>
 
 			<h:outputLabel value="Sobrenome" />
 			<h:inputText value="#{pessoaBean.pessoa.sobrenome}" 
-				required="true" requiredMessage="Informe o sobrenome" validatorMessage="O sobrenome não pode ser vazio">
+				required="true" requiredMessage="Informe o sobrenome" pt:placeholder="Informe o sobrenome" 
+				validatorMessage="O sobrenome não pode ser vazio">
 				<f:validateLength minimum="1"/>	
 			</h:inputText>
 
 			<h:outputLabel value="Idade" />
-			<h:inputText value="#{pessoaBean.pessoa.idade}" />
+			<h:inputText value="#{pessoaBean.pessoa.idade}" pt:placeholder="Idade"/>
 
 			<h:outputLabel value="Sexo" />
 			<h:selectOneMenu id="campoSexo" value="#{pessoaBean.pessoa.sexo}">
@@ -65,40 +68,41 @@
 			</h:selectManyMenu>
 			
 			<h:outputLabel value="CEP:"/>
-			<h:inputText value="#{pessoaBean.pessoa.cep}">
+			<h:inputText value="#{pessoaBean.pessoa.cep}" pt:placeholder="Informe o CEP e aperte TAB">
 				<f:ajax event="blur" execute="@this" 
 				listener="#{pessoaBean.pesquisaCep}"
 				render="logradouro complemento bairro localidade uf unidade"/>      <!-- No JSF a perda de foco é blur -->
 			</h:inputText>
 			
 			<h:outputLabel value="Logradouro:"/>
-			<h:inputText value="#{pessoaBean.pessoa.logradouro}" id="logradouro"/>
+			<h:inputText value="#{pessoaBean.pessoa.logradouro}" id="logradouro" pt:placeholder="Logradouro"/>
 			
 			<h:outputLabel value="Complemento:"/>
-			<h:inputText value="#{pessoaBean.pessoa.complemento}" id="complemento"/>
+			<h:inputText value="#{pessoaBean.pessoa.complemento}" id="complemento" pt:placeholder="complemento"/>
 			
 			<h:outputLabel value="Bairro:"/>
-			<h:inputText value="#{pessoaBean.pessoa.bairro}" id="bairro"/>
+			<h:inputText value="#{pessoaBean.pessoa.bairro}" id="bairro" pt:placeholder="Bairro"/>
 			
 			<h:outputLabel value="Cidade"/>
-			<h:inputText value="#{pessoaBean.pessoa.localidade}" id="localidade"/>
+			<h:inputText value="#{pessoaBean.pessoa.localidade}" id="localidade" pt:placeholder="Cidade"/>
 			
 			<h:outputLabel value="UF:"/>
-			<h:inputText value="#{pessoaBean.pessoa.uf}" id="uf"/>
+			<h:inputText value="#{pessoaBean.pessoa.uf}" id="uf" pt:placeholder="UF"/>
 			
 			<h:outputLabel value="Unidade"/>
-			<h:inputText value="#{pessoaBean.pessoa.unidade}" id="unidade"/>
+			<h:inputText value="#{pessoaBean.pessoa.unidade}" id="unidade" pt:placeholder="Número"/>
 					
 			<h:outputLabel value="Ativo"/>
 			<h:selectBooleanCheckbox value="#{pessoaBean.pessoa.ativo}"/>
 	
 			
 			<h:outputLabel value="Login:"/>
-			<h:inputText value="#{pessoaBean.pessoa.login}"/>
+			<h:inputText value="#{pessoaBean.pessoa.login}" pt:placeholder="Informe um login"/>
 			
 			<h:outputLabel value="Senha:"/>
 			<h:inputSecret value="#{pessoaBean.pessoa.senha}" 
-				required="true" requiredMessage="Informe uma senha" validatorMessage="A senha precisa ter no mínimo 3 caracteres">
+				required="true" requiredMessage="Informe uma senha" pt:placeholder="Informe a senha" 
+				validatorMessage="A senha precisa ter no mínimo 3 caracteres">
 				<f:validateLength minimum="3"/>
 			</h:inputSecret>
 			
@@ -127,6 +131,21 @@
 				<f:selectItem itemValue="4" itemLabel="C#"/>
 				<f:selectItem itemValue="5" itemLabel="Cobol"/>
 			</h:selectManyCheckbox>
+			
+			
+			<h:outputLabel value="Estados:"/>
+			<h:selectOneMenu value="#{pessoaBean.pessoa.estados}" id="comboEstados" immediate="true" converter="estadoConverter">
+				<f:selectItem itemLabel="--[Selecione]--" noSelectionOption="true"/>
+				<f:selectItems value="#{pessoaBean.estados}" var="est" itemValue="#{est.id}"/>
+				<f:ajax event="change" execute="@this" render="comboCidade" 
+				listener="#{pessoaBean.carregaCidades}"/><!-- Carrega apenas o valor do componente via Ajax para os ervidor -->
+			</h:selectOneMenu>
+			
+			<h:outputLabel value="Cidades:"/>
+			<h:selectOneMenu value="#{pessoaBean.pessoa.cidade}" id="comboCidade" immediate="true" converter="cidadeConverter">
+				<f:selectItem itemLabel="--[Selecione]--" noSelectionOption="true"/>
+				<f:selectItems value="#{pessoaBean.cidades}"/>
+			</h:selectOneMenu>
 
 			<h:outputLabel />
 			<h:panelGroup>

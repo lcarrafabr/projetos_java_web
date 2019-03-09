@@ -12,14 +12,22 @@ import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.html.HtmlSelectOneMenu;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpServletRequest;
+
+import org.hibernate.mapping.PrimaryKey;
 
 import com.google.gson.Gson;
 
 import br.com.dao.DaoGeneric;
+import br.com.entidades.Cidades;
+import br.com.entidades.Estados;
 import br.com.entidades.Pessoa;
+import br.com.jpautil.JPAUtil;
 import br.com.repository.IDaoPessoa;
 import br.com.repository.IDaoPessoaImpl;
 
@@ -32,6 +40,9 @@ public class PessoaBean {
 	private List<Pessoa> pessoas = new ArrayList<>();
 	
 	private IDaoPessoa iDaoPessoa = new IDaoPessoaImpl();
+	
+	private List<SelectItem> estados;
+	private List<SelectItem> cidades;
 
 	public String salvar() {
 
@@ -107,7 +118,6 @@ public class PessoaBean {
 			pessoa.setIbge(gsonAux.getIbge());
 			pessoa.setGia(gsonAux.getGia());
 			
-			System.out.println(gsonAux);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -115,7 +125,9 @@ public class PessoaBean {
 		}
 		
 	}
+
 	
+	/*------------------------------------------------------------------------------------------------------------------------------*/
 	@PostConstruct
 	public void carregarPessoas() {
 		pessoas = daoGeneric.getListEntity(Pessoa.class);
@@ -138,6 +150,53 @@ public class PessoaBean {
 	}
 	
 	
+	/*Ao criar o metodo getEstados criei a linha estados = iDaoPessoa.listaEstado() e no JSF aponto para a variavel estado*/
+	public List<SelectItem> getEstados() {
+		
+		estados = iDaoPessoa.lisstaEstados();
+		
+		return estados;
+	}
+	
+/*------------------------------------------------------------------------------------------------------------------------------*/	
+	
+	
+	public void carregaCidades(AjaxBehaviorEvent event) {
+		
+//		String codigoEstado = (String) event.getComponent().getAttributes().get("submittedValue");
+		
+		
+		Estados estado = (Estados) ((HtmlSelectOneMenu) event.getSource()).getValue();
+			
+			
+			if(estados != null) {
+				
+				pessoa.setEstados(estado);
+				 
+				List<Cidades> cidades = JPAUtil.getEntityManager()
+						.createQuery("from Cidades where estados.id = " + estado.getId())
+						.getResultList();
+				
+				List<SelectItem> selectItemsCidade = new ArrayList<>();
+				
+				for (Cidades cidade : cidades) {
+					selectItemsCidade.add(new SelectItem(cidade, cidade.getNome()));
+				}
+				
+				setCidades(selectItemsCidade);
+			}
+		
+	}
+	
+	public List<SelectItem> getCidades() {
+		return cidades;
+	}
+	
+	
+	public void setCidades(List<SelectItem> cidades) {
+		this.cidades = cidades;
+	}
+	
 	public String logar() {
 		
 		Pessoa pessoaUser = iDaoPessoa.consultarUsuario(pessoa.getLogin(), pessoa.getSenha());
@@ -152,6 +211,21 @@ public class PessoaBean {
 			
 			return "primeirapagina.jsf";
 		}
+		
+		return "index.jsf";
+	}
+	
+	
+	public String deslogar() {
+		
+		/*Retiro a Key do usuarioLogado*/
+		FacesContext context = FacesContext.getCurrentInstance();
+		ExternalContext externalContext = context.getExternalContext();
+		externalContext.getSessionMap().remove("usuarioLogado");
+		
+		/*Entro na sessão Servlet e removo a sessão*/
+		HttpServletRequest httpServletRequest = (HttpServletRequest) context.getCurrentInstance().getExternalContext().getRequest();
+		httpServletRequest.getSession().invalidate();
 		
 		return "index.jsf";
 	}
