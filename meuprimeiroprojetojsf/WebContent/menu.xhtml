@@ -3,13 +3,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui = "http://java.sun.com/jsf/facelets">
+	xmlns:ui = "http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	
+	<h:form>  
+    <p:growl id="messages"/>
+ 
+    <p:menubar>
+        
+ 
+         
+       <p:menuitem  value="Administração" action="primeirapagina" icon="pi pi-times" rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}"/>
+ 		<p:menuitem  value="Lançamentos" action="lancamento" icon="pi pi-times" />
+ 
+        <f:facet name="options">
+            <p:inputText style="margin:1px 10px 1px 1px;" placeholder="Search"/>
+            <p:commandButton action="#{pessoaBean.deslogar}" value="Logout" icon="pi pi-home"/>
+        </f:facet>
+    </p:menubar>
+</h:form>
 		
-		<h:form>
-			<h:graphicImage height="55" width="55" library="img" name="robocat_cat-512.png" />
-				
-			<h:commandLink value="Administração" action="primeirapagina" style="margin-left: 1cm" rendered="#{pessoaBean.permiteAcesso('ADMINISTRADOR')}"/>
-			<h:commandLink value="Lançamentos" action="lancamento" style="margin-left: 1cm"/>
-			<h:commandLink value="Trocar usuário" action="#{pessoaBean.deslogar}" style="margin-left: 1cm"/>
-		</h:form>
+		<br/>
 	</html>
