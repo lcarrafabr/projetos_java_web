@@ -20,5 +20,16 @@ public class UsuarioPessoaManegedBean {
 	public void setUsuarioPessoa(UsuarioPessoa usuarioPessoa) {
 		this.usuarioPessoa = usuarioPessoa;
 	}
+	public String salvar() {
+		
+		daoGeneric.salvar(usuarioPessoa);
+//		novo(); /*Caso queira que após salvar o formulário fique em branco*/
+		return "";
+	}
+	
+	public String novo() {
+		usuarioPessoa = new UsuarioPessoa();
+		return "";
+	}
 
 }
