@@ -27,7 +27,7 @@ public class EstadoConverter implements Converter, Serializable{
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		
-		Estados estados = (Estados)entityManager.find(Estados.class, Long.parseLong(codigoEstado));
+		Estados estados = entityManager.find(Estados.class, Long.parseLong(codigoEstado));
 		
 		return estados;
 	}

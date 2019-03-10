@@ -212,7 +212,7 @@
 			</h:column>
 			<h:column>
 				<f:facet name="header">Editar</f:facet>
-				<h:commandLink value="">
+				<h:commandLink value="" action="#{pessoaBean.editar}">
 					<f:setPropertyActionListener value="#{pessoa}" target="#{pessoaBean.pessoa}" />
 					<h:graphicImage value="resources/img/update_16.png"/>
 				</h:commandLink>
@@ -229,6 +229,8 @@
 	</h:form>
 	
 	
+	<!-- *************************************************  ABAIXO ESTÁ O DATATABLE COM PRIMEFACES************************************************* -->
+	
 	<h:form id="formTable2">
 		<p:dataTable var="pessoa" value="#{pessoaBean.pessoas}">
     <p:column headerText="Id">
@@ -244,7 +246,7 @@
     </p:column>
     
     <p:column headerText="Editar">
-        <h:commandLink value="">
+        <h:commandLink value="" action="#{pessoaBean.editar}">
 					<f:setPropertyActionListener value="#{pessoa}" target="#{pessoaBean.pessoa}" />
 					<h:graphicImage value="resources/img/update_16.png"/>
 				</h:commandLink>

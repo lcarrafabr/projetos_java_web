@@ -19,8 +19,6 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.mapping.PrimaryKey;
-
 import com.google.gson.Gson;
 
 import br.com.dao.DaoGeneric;
@@ -188,6 +186,29 @@ public class PessoaBean {
 		
 	}
 	
+	
+	public void editar() {
+
+
+		if(pessoa.getCidade() != null) {
+			Estados estado = pessoa.getCidade().getEstados();
+			pessoa.setEstados(estado);
+			
+			List<Cidades> cidades = JPAUtil.getEntityManager()
+					.createQuery("from Cidades where estados.id = " + estado.getId())
+					.getResultList();
+			
+			List<SelectItem> selectItemsCidade = new ArrayList<>();
+			
+			for (Cidades cidade : cidades) {
+				selectItemsCidade.add(new SelectItem(cidade, cidade.getNome()));
+			}
+			
+			setCidades(selectItemsCidade);
+		
+		}
+	}
+	
 	public List<SelectItem> getCidades() {
 		return cidades;
 	}
@@ -224,7 +245,7 @@ public class PessoaBean {
 		externalContext.getSessionMap().remove("usuarioLogado");
 		
 		/*Entro na sessão Servlet e removo a sessão*/
-		HttpServletRequest httpServletRequest = (HttpServletRequest) context.getCurrentInstance().getExternalContext().getRequest();
+		HttpServletRequest httpServletRequest = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
 		httpServletRequest.getSession().invalidate();
 		
 		return "index.jsf";
