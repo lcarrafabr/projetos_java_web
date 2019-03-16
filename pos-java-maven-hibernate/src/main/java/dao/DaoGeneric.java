@@ -22,7 +22,7 @@ public class DaoGeneric<E> {
 	}
 
 	public E pesquisar(Integer id, Class<E> entidade) {
-		E e = (E) entityManager.find(entidade, id);
+		E e = entityManager.find(entidade, id);
 		return e;
 
 	}
@@ -39,7 +39,7 @@ public class DaoGeneric<E> {
 		return entidadeSalva;
 	}
 
-	public void deletelarPorId(E entidade) {
+	public void deletelarPorId(E entidade) throws Exception {
 
 		Object id = HibernateUtil.getPrimaryKey(entidade);
 

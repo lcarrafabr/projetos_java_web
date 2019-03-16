@@ -65,7 +65,7 @@ public class TesteHibernate {
 
 		UsuarioPessoa pessoa = daoGeneric.pesquisar(13 , UsuarioPessoa.class);
 		
-		daoGeneric.deletelarPorId(pessoa);
+//		daoGeneric.deletelarPorId(pessoa);
 	
 //		System.out.println(pessoa);
 	}
