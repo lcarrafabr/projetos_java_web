@@ -22,7 +22,10 @@ public class DaoGeneric<E> {
 	}
 
 	public E pesquisar(Integer id, Class<E> entidade) {
-		E e = entityManager.find(entidade, id);
+//		E e = entityManager.find(entidade, id);
+		
+		entityManager.clear();
+		E e = (E) entityManager.createQuery("from " + entidade.getSimpleName() + " where id = " + id).getSingleResult();
 		return e;
 
 	}
